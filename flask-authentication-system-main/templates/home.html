@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            display: flex;
+            margin: 0;
+            background-image: url('static/images/dead.jpg');
+            background-size: cover;
+            background-position: center -2px;
+            background-repeat: no-repeat;
+            color: #fff;
+        }
+        .sidebar {
+            width: 210px;
+            background-color: rgba(0, 100, 0, 0.5);
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 1;
+        }
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+            margin-left: 245px;
+            z-index: 0;
+        }
+        .content h1 {
+            color: #fff;
+            text-align: left;
+            margin-left: 20px;
+        }
+        .menu-item {
+            list-style-type: none;
+            padding: 10px 0;
+        }
+        .menu-item a {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        .date-time-picker {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 10px 0;
+        }
+    }
+        .date-time-picker label,
+        .date-time-picker input {
+            color: #fff;
+        }
+        .teacher-category {
+            margin-bottom: 20px;
+        }
+        .teacher-category h2 {
+            color: #555;
+        }
+        .teacher-list {
+            list-style: none;
+            padding: 0;
+        }
+        .teacher-item {
+            margin: 25px 10;
+        }
+        .teacher-item a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .content ul, .content li, .content h2 {
+            color: #fff;
+        }
+        .content strong,
+        .content a {
+            color: #fff;
+        }
+        .outline-button {
+            border: 2px solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .outline-button:hover {
+            background-color: transparent;
+            color: #000;
+        } 
+
+    </style>
+    <script>
+        function displayTeachers(className) {
+            var content = document.querySelector('.content');
+            var teachers = getTeachersForClass(className);
+
+            if (teachers.length > 0) {
+                var teacherList = '<h2>Teachers</h2><ul>';
+                teachers.forEach(function (teacher) {
+                    teacherList += `<li><strong>${teacher.name}</strong> <button class="outline-button" onclick="addReminder('${teacher.name}')">Add Reminder</button></li>`;
+                });
+                teacherList += '</ul>';
+                content.innerHTML = teacherList;
+            } else {
+                content.innerHTML = `<h2>No teachers found for ${className}</h2>`;
+            }
+        }
+
+        function getTeachersForClass(className) {
+            var teachers = [];
+
+            if (className === 'SE') {
+                teachers = [
+                    { name: 'Prasad sir' },
+                    { name: 'Anant sir' },
+                    { name: 'Jennifer mam' },
+                    { name: 'Nancy mam' },
+                    { name: 'Ankur sir' }
+                ];
+            } else if (className === 'TE') {
+                teachers = [
+                    { name: 'Pranali mam' },
+                    { name: 'Sneha mam' },
+                    { name: 'Milind sir' },
+                    { name: 'Yogesh sir' },
+                    { name: 'Anita mam' }
+                ];
+            } else if (className === 'BE') {
+                teachers = [
+                    { name: 'Megha mam' },
+                    { name: 'Asmita mam' },
+                    { name: 'Manita mam' },
+                    { name: 'Nilashree mam'}
+                ];
+            }
+
+            return teachers;
+        }
+
+        function addReminder(teacherName) {
+            var content = document.querySelector('.content');
+            content.innerHTML = `
+                <h2>Add Reminder for ${teacherName}</h2>
+                <form style="color: #fff; display: block; text-align: left; margin: 0" onsubmit="saveReminder(event, '${teacherName}')">
+                    <label for="message">Message:</label>
+                    <input type="text" id="message" required><br><br>
+                    <div class="date-time-picker" style=" justify-content: flex-start; padding: 0">
+                        <label for="deadline">Deadline:</label>
+                        <input type="datetime-local" id="deadline" required>
+                    </div>
+                    <br>
+                    <div style="text-align:left;">
+                        <input type="submit" value="Set Reminder">
+                    </div>
+                </form>
+            `;
+        }
+
+        function saveReminder(event, teacherName) {
+            event.preventDefault();
+            var message = document.getElementById('message').value;
+            var deadline = document.getElementById('deadline').value;
+            var reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+            reminders.push({ teacher: teacherName, message: message, deadline: deadline });
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+            alert('Reminder added successfully!');
+        }
+
+        function displayHOD() {
+    var content = document.querySelector('.content');
+    content.innerHTML = `
+        <h2>HOD</h2>
+        <form style="color: #fff; display: block; text-align: left; margin: 0" onsubmit="sendReminders(event)">
+            <label for="message">Message:</label>
+            <input type="text" id="message" required><br><br>
+            <div class="date-time-picker" style=" justify-content: flex-start; padding: 0">
+                <label for="Date">Date:</label>
+                <input type="date" id="Date" required>
+            </div>
+            <br>
+            <div class="date-time-picker" style=" justify-content: flex-start; padding: 0">
+                <label for="Time">Time:</label>
+                <input type="time" id="Time" required>
+            </div>
+            <br>
+            <label>Select Classes:</label><br>
+            <input type="checkbox" name="SE"> SE<br>
+            <input type="checkbox" name="TE"> TE<br>
+            <input type="checkbox" name="BE"> BE<br><br>
+            <input type="submit" value="Send Reminders">
+        </form>
+
+            `;
+
+    }
+
+        function sendReminders(event) {
+            event.preventDefault();
+            var message = document.getElementById('message').value;
+            var selectedClasses = [];
+            var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+
+            checkboxes.forEach(function(checkbox) {
+                selectedClasses.push(checkbox.name);
+            });
+
+            var confirmationMessage = "Reminders sent to: " + selectedClasses.join(", ");
+            alert(confirmationMessage);
+
+            // Reset form
+            document.querySelector('form').reset();
+        }
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li><a href="{{ url_for( 'dashboard' )}}">Dashboard</a></li>
+            <li class="menu-item"><a onclick="displayHOD()">HOD</a></li>
+            <li class="menu-item"><a onclick="displayTeachers('SE')">SE</a></li>
+            <li class="menu-item"><a onclick="displayTeachers('TE')">TE</a></li>
+            <li class="menu-item"><a onclick="displayTeachers('BE')">BE</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>WELCOME!</h1>
+        <!-- Add your content here -->
+    </div>
+</body>
+</html>
