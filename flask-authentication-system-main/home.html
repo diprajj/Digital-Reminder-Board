@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            display: flex;
+            margin: 0;
+            background-image: url('static/images/dead.jpg');
+            background-size: cover;
+            background-position: center -2px;
+            background-repeat: no-repeat;
+            color: #fff;
+        }
+        
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+            margin-left: 245px;
+            z-index: 0;
+        }
+        .content h1 {
+            color: #fff;
+            text-align: left;
+        }
+        
+        .form-container {
+            background-color: rgba(0, 100, 0, 0.5);
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+            top: 100px;
+            left: 250px;
+            width: 245px;
+            height: 100%;
+            z-index: 1;
+        }
+
+        form {
+            color: #fff;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form action="{{ url_for('send_reminder') }}" method="post">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required><br><br>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required><br><br>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required><br><br>
+            <label for="classes">Select Classes:</label><br>
+            <input type="checkbox" name="classes" value="SE"> SE<br>
+            <input type="checkbox" name="classes" value="TE"> TE<br>
+            <input type="checkbox" name="classes" value="FE"> FE<br><br>
+            <label for="teacher">Select Teacher:</label>
+            <select name="teacher" id="teacher">
+                <option value="Prasad sir">Prasad sir</option>
+                <option value="Anant sir">Anant sir</option>
+                <option value="Jennifer mam">Jennifer mam</option>
+                <option value="Nancy mam">Nancy mam</option>
+                <option value="Pranali mam">Pranali mam</option>
+                <option value="Sneha mam">Sneha mam</option>
+                <option value="Yogesh sir">Yogesh sir</option>
+                <option value="Anita mam">Anita mam</option>
+                <option value="Megha mam">Megha mam</option>
+                <option value="Asmita mam">Asmita mam</option>
+                <option value="Manita mam">Manita mam</option>
+                <option value="Nilashree mam">Nilashree mam</option>
+            </select><br><br>
+            <input type="submit" value="Send Reminder">
+        </form>
+    </div>
+
+    <div class="content">
+        <h1>WELCOME!</h1>
+        <!-- Add your content here -->
+    </div>
+</body>
+</html>
